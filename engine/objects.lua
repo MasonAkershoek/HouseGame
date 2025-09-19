@@ -4,12 +4,7 @@
 Node = {}
 Node.__index = Node
 
----Node Object Constructer
----@param nx float New X Position
----@param ny float New Y Position
----@param args table A table containing arguments to change the construction of the object
----@return table
-function Node.new(nx, ny, args)
+function Node.new(args)
     local self = setmetatable({}, Node)
 
     self.T = "Node"
@@ -21,8 +16,8 @@ function Node.new(nx, ny, args)
     -- Transformation in the nodes local space
     self._Transform =
     {
-        x = self._Args.T.x or nx or 0,
-        y = self._Args.T.y or ny or 0,
+        x = self._Args.T.x or 0,
+        y = self._Args.T.y or 0,
         w = self._Args.T.w or 0,
         h = self._Args.T.h or 0,
         r = self._Args.T.r or 0,
@@ -34,8 +29,8 @@ function Node.new(nx, ny, args)
 
     self._GlobalTransform =
     {
-        x = self._Args.T.x or nx or 0,
-        y = self._Args.T.y or ny or 0,
+        x = self._Args.T.x or 0,
+        y = self._Args.T.y or 0,
         w = self._Args.T.w or 0,
         h = self._Args.T.h or 0,
         r = self._Args.T.r or 0,
@@ -280,4 +275,34 @@ end
 
 function Node:draw()
     drawList(self._Children)
+end
+
+Room = {}
+Room.__index = Room
+
+function Room.new(config)
+    local self = setmetatable({}, Room)
+
+    self.T = "Room"
+    self._Config = config
+
+    self._Name = config.name
+    self._Doors = config.doors
+    self._DirectionMask = config.dirmask
+    self._Flags = config.flags
+end
+
+Door = {}
+Door.__index = Door
+
+function Door.new(config)
+    local self = setmetatable({}, Room)
+
+    self.T = "Door"
+    self._Config = config
+
+    self._DoorBoundingRect = config.boundingrect
+
+    self.closed = config.closed
+    self._OpenCondition = config.openlambda
 end

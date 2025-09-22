@@ -27,3 +27,17 @@ function removeSelf(obj, tbl)
         end
     end
 end
+
+function changeRoom(key)
+    if key == "left" then
+        G.CURRENT_DIRECTION = G.CURRENT_DIRECTION - 1
+    elseif key == "right" then
+        G.CURRENT_DIRECTION = G.CURRENT_DIRECTION + 1
+    end
+
+    if G.CURRENT_DIRECTION < 1 then
+        G.CURRENT_DIRECTION = 4
+    elseif G.CURRENT_DIRECTION > 4 then
+        G.CURRENT_DIRECTION = 1
+    end
+end

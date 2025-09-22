@@ -3,7 +3,7 @@ GAME_VERSION = "0.0.0"
 function Game:setGlobals()
 
     -- Current room
-    self.CURRENT_ROOM = nil
+    self.CURRENT_ROOM = 1
     
     -- Total distinct in game movements
     self.MOVES = 0
@@ -19,11 +19,13 @@ function Game:setGlobals()
 
     -- Enum Directions
     self.DIRECTIONS = {
-        NORTH = 0,
-        EAST = 1,
-        SOUTH = 2,
-        WEST = 3
+        NORTH = 1,
+        EAST = 2,
+        SOUTH = 3,
+        WEST = 4
     }
+
+    self.CURRENT_DIRECTION = self.DIRECTIONS.NORTH
     
     self.MAJORSTATE = nil
     self.MINORSTATE = nil

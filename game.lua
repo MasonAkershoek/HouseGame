@@ -12,8 +12,8 @@ function Game:setup()
     bootManager("Starting up", .1)
 
     -- Canves
-    self.drawSpace = love.graphics.newCanvas(_GAME_WIDTH, _GAME_HEIGHT)
-    self.pauseSpace = love.graphics.newCanvas(_GAME_WIDTH, _GAME_HEIGHT)
+    --self.drawSpace = love.graphics.newCanvas(_GAME_WIDTH, _GAME_HEIGHT)
+    --self.pauseSpace = love.graphics.newCanvas(_GAME_WIDTH, _GAME_HEIGHT)
 
     bootManager("Loading Images", .3)
     self:loadGraphics()

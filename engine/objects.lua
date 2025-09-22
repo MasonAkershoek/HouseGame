@@ -11,8 +11,6 @@ function Node.new(args)
 
     self._Args = args or { T = {} }
 
-    self._Conf = self._Args.conf or {}
-
     -- Transformation in the nodes local space
     self._Transform =
     {
@@ -27,23 +25,23 @@ function Node.new(args)
         sky = self._Args.T.sky or 0
     }
 
-    self._GlobalTransform =
-    {
-        x = self._Args.T.x or 0,
-        y = self._Args.T.y or 0,
-        w = self._Args.T.w or 0,
-        h = self._Args.T.h or 0,
-        r = self._Args.T.r or 0,
-        sx = self._Args.T.sx or 1,
-        sy = self._Args.T.sy or 1,
-        skx = self._Args.T.skx or 0,
-        sky = self._Args.T.sky or 0
-    }
+    -- self._GlobalTransform =
+    -- {
+    --     x = self._Args.T.x or nx or 0,
+    --     y = self._Args.T.y or ny or 0,
+    --     w = self._Args.T.w or 0,
+    --     h = self._Args.T.h or 0,
+    --     r = self._Args.T.r or 0,
+    --     sx = self._Args.T.sx or 1,
+    --     sy = self._Args.T.sy or 1,
+    --     skx = self._Args.T.skx or 0,
+    --     sky = self._Args.T.sky or 0
+    -- }
 
-    self._ClickOffset = Vector.new(0, 0)
+    -- self._ClickOffset = Vector.new(0, 0)
 
     -- Zone of the Node where mouse hover will not be trigered
-    self._DeadZone = nil
+    -- self._DeadZone = nil
 
     -- Node States
     self._States =
@@ -51,19 +49,19 @@ function Node.new(args)
         visible = true,
         paused = false,
         clicked = { is = false, can = true },
-        drag = { is = false, can = true },
+        -- drag = { is = false, can = true },
         hovered = { is = false, can = true },
     }
 
     -- Valid modes are "Always", "Never", "Input",
-    self._PauseMode = self._Args.PauseMode or "Always"
+    -- self._PauseMode = self._Args.PauseMode or "Always"
 
     -- Parent/Children pointers
     self._Parent = self._Args.parent or nil
     self._Children = {}
 
     -- Added functions
-    self._Functions = self._Args.functions or {}
+    -- self._Functions = self._Args.functions or {}
 
     return self
 end
@@ -92,20 +90,20 @@ function Node:setSize(nw, nh)
     end
 end
 
-function Node:setGlobalPos()
-    if self.parent then
-        local parentTransform = self.parent._GlobalTransform
-        self._GlobalTransform.x = parentTransform.x + self._Transform.x
-        self._GlobalTransform.y = parentTransform.y + self._Transform.y
-        self._GlobalTransform.r = parentTransform.r + self._Transform.r
-        self._GlobalTransform.sx = parentTransform.sx * self._Transform.sx
-        self._GlobalTransform.sy = parentTransform.sy * self._Transform.sy
-        self._GlobalTransform.skx = parentTransform.skx + self._Transform.skx
-        self._GlobalTransform.sky = parentTransform.sky + self._Transform.sky
-    else
-        self._GlobalTransform = self._Transform
-    end
-end
+-- function Node:setGlobalPos()
+--     if self.parent then
+--         local parentTransform = self.parent._GlobalTransform
+--         self._GlobalTransform.x = parentTransform.x + self._Transform.x
+--         self._GlobalTransform.y = parentTransform.y + self._Transform.y
+--         self._GlobalTransform.r = parentTransform.r + self._Transform.r
+--         self._GlobalTransform.sx = parentTransform.sx * self._Transform.sx
+--         self._GlobalTransform.sy = parentTransform.sy * self._Transform.sy
+--         self._GlobalTransform.skx = parentTransform.skx + self._Transform.skx
+--         self._GlobalTransform.sky = parentTransform.sky + self._Transform.sky
+--     else
+--         self._GlobalTransform = self._Transform
+--     end
+-- end
 
 -- Parent Child relationship functions
 function Node:addChildren(newChild, tag)
@@ -144,15 +142,15 @@ function Node:removeParent()
     self:setParent(nil)
 end
 
-function Node:addFunction(newFunction)
-    table.insert(self.functions, newFunction)
-end
+-- function Node:addFunction(newFunction)
+--     table.insert(self.functions, newFunction)
+-- end
 
-function Node:updateFunctions()
-    for _, func in ipairs(self.functions) do
-        func(self)
-    end
-end
+-- function Node:updateFunctions()
+--     for _, func in ipairs(self.functions) do
+--         func(self)
+--     end
+-- end
 
 --- Returns a spesifed point on the object
 --- @param pos string Default: center [center, topleft, topright, bottomleft, bottomright, centerleft, centerright, centertop, centerbottom]
@@ -194,9 +192,9 @@ function Node:getPos(pos, locFlag)
     return ret
 end
 
-function Node:setDeadZone(deadZone)
-    self.deadZone = deadZone
-end
+-- function Node:setDeadZone(deadZone)
+--     self.deadZone = deadZone
+-- end
 
 function Node:setScale(newScale)
     self._Transform.scale = newScale
@@ -213,23 +211,11 @@ function Node:setPos(nx, ny)
     end
 end
 
-function Node:checkDeadZone(mx, my)
-    -- Check the dead Zone
-    if self.deadZone ~= nil then
-        if mx > self.deadZone.t1.x and mx < self.deadZone.t2.x then
-            return true
-        end
-    else
-        return false
-    end
-    return false
-end
-
 function Node:checkMouseHover()
     local mousex, mousey = love.mouse.getPosition()
     local mousex, mousey = toGame(mousex, mousey)
-    if mousex > (self._GlobalTransform.x - self:getWidth() / 2) and mousex < (self._GlobalTransform.x + self:getWidth() / 2) then
-        if mousey > (self._GlobalTransform.y - self:getHeight() / 2) and mousey < (self._GlobalTransform.y + self:getHeight() / 2) then
+    if mousex > (self._Transform.x - self:getWidth() / 2) and mousex < (self._Transform.x + self:getWidth() / 2) then
+        if mousey > (self._Transform.y - self:getHeight() / 2) and mousey < (self._Transform.y + self:getHeight() / 2) then
             if not self:checkDeadZone(mousex, mousey) then
                 return true
             end
@@ -240,8 +226,8 @@ function Node:checkMouseHover()
 end
 
 function Node:isInside(x, y)
-    if x > (self._GlobalTransform.x - self:getWidth() / 2) and x < (self._GlobalTransform.x + self:getWidth() / 2) then
-        if y > (self._GlobalTransform.y - self:getHeight() / 2) and y < (self._GlobalTransform.y + self:getHeight() / 2) then
+    if x > (self._Transform.x - self:getWidth() / 2) and x < (self._Transform.x + self:getWidth() / 2) then
+        if y > (self._Transform.y - self:getHeight() / 2) and y < (self._Transform.y + self:getHeight() / 2) then
             return true
         end
         return false
@@ -249,60 +235,82 @@ function Node:isInside(x, y)
     return false
 end
 
-function Node:checkPause()
-    if G.SETTINGS.PAUSED then
-        if self._PauseMode == "Always" then
-            return true
-        else
-            return false
-        end
-    end
-end
-
 function Node:drawBoundingRect()
     if G.DRAWBOUNDINGRECTS then
         love.graphics.setColor(lovecolors:getColor("BLUE"))
         love.graphics.setLineWidth(10)
-        love.graphics.rectangle("line", self._GlobalTransform.x - (self:getWidth() / 2),
-            self._GlobalTransform.y - (self:getHeight() / 2), self:getWidth(), self:getHeight())
+        love.graphics.rectangle("line", self._Transform.x - (self:getWidth() / 2),
+            self._Transform.y - (self:getHeight() / 2), self:getWidth(), self:getHeight())
         love.graphics.setColor({ 1, 1, 1, 1 })
     end
 end
 
-function Node:update(dt)
-    updateList(self._Children, dt)
+Plane = {{}, {__index = Node}}
+Plane.__index = Plane
+
+function Plane.new(planeData, args)
+    local self = setmetatable(Node.new(args), Plane)
 end
 
-function Node:draw()
-    drawList(self._Children)
-end
-
-Room = {}
+Room = {{}, {__index = Node}}
 Room.__index = Room
 
-function Room.new(config)
-    local self = setmetatable({}, Room)
+function Room.new(roomID, args)
+    local self = setmetatable(Node.new(args), Room)
+    self._roomID = roomID
+    self._roomName = 
 
-    self.T = "Room"
-    self._Config = config
-
-    self._Name = config.name
-    self._Doors = config.doors
-    self._DirectionMask = config.dirmask
-    self._Flags = config.flags
 end
 
-Door = {}
+Door = {{}, {__index = Node}}
 Door.__index = Door
 
-function Door.new(config)
-    local self = setmetatable({}, Room)
-
+function Door.new(doorData, args)
+    local self = setmetatable(Node.new(args), Door)
     self.T = "Door"
-    self._Config = config
+    
+    self.doorPoints = doorData.points
+    self.nextLocation = doorData.nextLocation
+    self.closed = doorData.closed
+    self.unlockFunction = doorData.unlockFunction
+    self.closedImg = doorData.closedImg
+end
 
-    self._DoorBoundingRect = config.boundingrect
+-- Vector2 Object
+----------------------------------------------
+Vector = {}
+Vector.__index = Vector
 
-    self.closed = config.closed
-    self._OpenCondition = config.openlambda
+function Vector.new(x, y)
+    local self = setmetatable({}, Vector)
+
+    self.T = "Vector"
+    self.x = x or 0
+    self.y = y or 0
+    return self
+end
+
+function Vector:setVect(x, y)
+    self.x = x
+    self.y = y
+end
+
+function Vector:getX()
+    return self.x
+end
+
+function Vector:getY()
+    return self.y
+end
+
+function Vector:checkDistance(otherVect, space)
+    if self.x > (otherVect.x - space) and self.x < (otherVect.x + space) then
+        if self.y > (otherVect.y - space) and self.y < (otherVect.y + space) then
+            return true
+        else
+            return false
+        end
+    else
+        return false
+    end
 end

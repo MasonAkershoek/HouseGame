@@ -1,6 +1,7 @@
 require "math"
 
 require "engine.logger"
+require "engine.functions"
 
 function love.load()
 

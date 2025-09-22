@@ -1,3 +1,8 @@
+
+function getRoomData(roomID)
+    
+end
+
 -- This function was written by localthunk and slightly modified by me
 -- I plan to make more changes in the future
 function bootManager(msg, progress)
@@ -12,4 +17,13 @@ function bootManager(msg, progress)
     love.graphics.pop()
     love.graphics.present()
     logger:log(msg, " : ", progress)
+end
+
+-- Removes self from a given table
+function removeSelf(obj, tbl)
+    for x, y in ipairs(tbl) do
+        if y == obj then
+            table.remove(tbl, x)
+        end
+    end
 end
